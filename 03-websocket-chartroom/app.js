@@ -12,7 +12,8 @@ type: 0=进入，1=离开，2=日常消息
 msg:消息的内容
 time:聊天状态的具体时间
 */
-let count = 0
+let count = 0;
+let d = new Date(); 
 const server = ws.createServer(conn => {
     console.log('新的连接')
     count++
@@ -20,14 +21,14 @@ const server = ws.createServer(conn => {
     broadcast({
         type:TYPE_ENTER,
         msg:`${conn.userName}进入聊天室`,
-        time:new Date().toLocaleTimeString() //toLocaleTimeString()方法返回该日期对象时间部分的字符串
+        time:d.toLocaleTimeString() //toLocaleTimeString()方法返回该日期对象时间部分的字符串
     })
 
     conn.on('text', data => {
         broadcast({
             type:TYPE_MSG,
             msg:data,
-            time:new Date().toLocaleTimeString()
+            time:d.toLocaleTimeString()
         })
     });
     conn.on('close', data => {
@@ -36,7 +37,7 @@ const server = ws.createServer(conn => {
         broadcast({
             type:TYPE_LEAVE,
             msg:`${conn.userName}离开聊天室`,
-            time:new Date().toLocaleTimeString()
+            time:d.toLocaleTimeString()
         })
 
     });
